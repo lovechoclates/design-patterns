@@ -8,7 +8,7 @@ import patterns.visitor.structure.tools.ExpressionVisitor;
 public class AddExp extends Expression {
       public Expression e1,e2;
 
-    protected void accept(ExpressionVisitor v) {
+        public void accept(ExpressionVisitor v) {
         v.visitAddExpression(this);
     }
 }
