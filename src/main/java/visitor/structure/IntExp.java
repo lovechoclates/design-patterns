@@ -1,6 +1,6 @@
-package patterns.visitor.structure;
+package visitor.structure;
 
-import patterns.visitor.structure.tools.ExpressionVisitor;
+import visitor.tools.ExpressionVisitor;
 
 /**
  * Integer expression representation
