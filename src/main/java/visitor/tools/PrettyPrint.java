@@ -10,9 +10,9 @@ public class PrettyPrint extends ExpressionVisitor {
 
     public void visitAddExpression(AddExp e) {
         System.out.print("(");
-        e.e1.accept(this);
+        e.left.accept(this);
         System.out.print("+");
-        e.e2.accept(this);
+        e.right.accept(this);
         System.out.print(")");
     }
 }

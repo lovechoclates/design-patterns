@@ -50,14 +50,14 @@ public class PrettyPrintTest {
         //prep
         PrettyPrint prettyPrinter = new PrettyPrint();
         AddExp addExp = new AddExp();
-        IntExp e1 = new IntExp();
-        IntExp e2 = new IntExp();
+        IntExp left = new IntExp();
+        IntExp right = new IntExp();
 
-        e1.value = 1;
-        e2.value = 2;
+        left.value = 1;
+        right.value = 2;
 
-        addExp.e1 = e1;
-        addExp.e2 = e2;
+        addExp.left = left;
+        addExp.right = right;
 
         // test
         String expected = "(1+2)";
@@ -74,19 +74,19 @@ public class PrettyPrintTest {
         //prep
         PrettyPrint prettyPrinter = new PrettyPrint();
         AddExp addExp = new AddExp();
-        IntExp e1 = new IntExp();
-        AddExp subAddExp = new AddExp();
-        IntExp subAddExpE1 = new IntExp();
-        IntExp subAddExpE2 = new IntExp();
+        IntExp left = new IntExp();
+        AddExp subAddExpRight = new AddExp();
+        IntExp subAddExpRight_Left = new IntExp();
+        IntExp subAddExpRight_Right = new IntExp();
 
-        e1.value = 1;
-        subAddExpE1.value = 3;
-        subAddExpE2.value = 4;
+        left.value = 1;
+        subAddExpRight_Left.value = 3;
+        subAddExpRight_Right.value = 4;
 
-        addExp.e1 = e1; // 1
-        subAddExp.e1 = subAddExpE1; // 3
-        subAddExp.e2 = subAddExpE2; // 4
-        addExp.e2 = subAddExp; // 3+4
+        addExp.left = left; // 1
+        subAddExpRight.left = subAddExpRight_Left; // 3
+        subAddExpRight.right = subAddExpRight_Right; // 4
+        addExp.right = subAddExpRight; // 3+4
 
 
         // test
@@ -104,23 +104,65 @@ public class PrettyPrintTest {
         //prep
         PrettyPrint prettyPrinter = new PrettyPrint();
         AddExp addExp = new AddExp();
-        IntExp e1 = new IntExp();
-        AddExp subAddExp = new AddExp();
-        IntExp subAddExpE1 = new IntExp();
-        IntExp subAddExpE2 = new IntExp();
+        IntExp right = new IntExp();
+        AddExp subAddExpLeft = new AddExp();
+        IntExp subAddExpLeft_Left = new IntExp();
+        IntExp subAddExpLeft_Right = new IntExp();
 
-        e1.value = 1;
-        subAddExpE1.value = 3;
-        subAddExpE2.value = 4;
+        right.value = 1;
+        subAddExpLeft_Left.value = 3;
+        subAddExpLeft_Right.value = 4;
 
-        addExp.e2 = e1; // 1
-        subAddExp.e1 = subAddExpE1; // 3
-        subAddExp.e2 = subAddExpE2; // 4
-        addExp.e1 = subAddExp; // 3+4
+        addExp.right = right; // 1
+        subAddExpLeft.left = subAddExpLeft_Left; // 3
+        subAddExpLeft.right = subAddExpLeft_Right; // 4
+        addExp.left = subAddExpLeft; // 3+4
 
 
         // test
         String expected = "((3+4)+1)";
+        prettyPrinter.visitAddExpression(addExp);
+        String actual = systemOutContent.toString();
+
+        assertEquals(expected, actual);
+
+    }
+
+    @Test
+    public void visitComplexAddExpression() throws Exception {
+
+        //prep
+        PrettyPrint prettyPrinter = new PrettyPrint();
+        AddExp addExp = new AddExp();
+
+        // Prep left side
+        AddExp subAddExpLeft = new AddExp();
+        IntExp subAddExpLeft_Left = new IntExp();
+        IntExp subAddExpLeft_Right = new IntExp();
+
+        subAddExpLeft_Left.value = 3;
+        subAddExpLeft_Right.value = 4;
+
+        subAddExpLeft.left = subAddExpLeft_Left; // 3
+        subAddExpLeft.right = subAddExpLeft_Right; // 4
+        addExp.left = subAddExpLeft; // 3+4
+
+
+        // prep right side
+        AddExp subAddExpRight = new AddExp();
+        IntExp subAddExpRight_Left = new IntExp();
+        IntExp subAddExpRight_Right = new IntExp();
+
+        subAddExpRight_Left.value = 1;
+        subAddExpRight_Right.value = 2;
+
+        subAddExpRight.left = subAddExpRight_Left; // 1
+        subAddExpRight.right = subAddExpRight_Right; // 2
+        addExp.right = subAddExpRight; // 1+2
+
+
+        // test
+        String expected = "((3+4)+(1+2))";
         prettyPrinter.visitAddExpression(addExp);
         String actual = systemOutContent.toString();
 
